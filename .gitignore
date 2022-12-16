@@ -1,0 +1,6 @@
+postgres/
+static/*
+uploads/*
+*.secret.exs
+.env
+!*example.*
