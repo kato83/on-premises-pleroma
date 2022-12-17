@@ -6,7 +6,9 @@ services:
     container_name: pleroma_db
     restart: always
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "pleroma"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+    networks:
+      - nginx
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -23,13 +25,13 @@ services:
           "CMD-SHELL",
           "wget -q --spider --proxy=off localhost:4000 || exit 1",
         ]
+    networks:
+      - nginx
     restart: always
     ports:
       - '4000:4000'
     build:
       context: .
-      # Feel free to remove or override this section
-      # See 'Build-time variables' in README.md
       args:
         - "UID=${UID}"
         - "GID=${GID}"
@@ -48,3 +50,8 @@ services:
       DB_NAME: ${DB_NAME}
     depends_on:
       - db
+
+networks:
+  nginx:
+    external: true
+    name: nginx
