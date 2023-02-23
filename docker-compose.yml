@@ -8,7 +8,7 @@ services:
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
     networks:
-      - nginx
+      - pleroma
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -26,7 +26,7 @@ services:
           "wget -q --spider --proxy=off localhost:4000 || exit 1",
         ]
     networks:
-      - nginx
+      - pleroma
     restart: always
     expose:
       - 4000
@@ -52,6 +52,7 @@ services:
       - db
 
 networks:
-  nginx:
-    external: true
-    name: nginx
+  pleroma:
+    internal: false
+    driver: bridge
+    name: pleroma
